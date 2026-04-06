@@ -6,6 +6,7 @@ admin_password.txt
 
 # 忽略日志文件
 debug.log
+*.log
 
 # 忽略临时文件
 *.tmp
