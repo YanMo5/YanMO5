@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联系我 - 我的个人博客</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">YanMo的个人博客</a>
+            </div>
+            <div class="nav-container">
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="articles.html">文章</a></li>
+                    <li><a href="about.html">关于我</a></li>
+                    <li><a href="contact.html" class="active">联系</a></li>
+                    <li><a href="guestbook.html">留言板</a></li>
+                    <li><a href="links.html">友链</a></li>
+                    <li><a href="admin.html">管理</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button class="theme-toggle">切换到白昼模式</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="contact-page">
+            <h1>联系我</h1>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h2>联系方式</h2>
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-text">
+                            <h3>邮箱</h3>
+                            <p>3351708803@qq.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">🌐</div>
+                        <div class="contact-text">
+                            <h3>社交媒体</h3>
+                            <p>GitHub / Twitter / LinkedIn</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">💬</div>
+                        <div class="contact-text">
+                            <h3>在线聊天</h3>
+                            <p>微信：15206561773</p>
+                            <p>QQ：3351708803</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h2>发送消息</h2>
+                    <form>
+                        <div class="form-group">
+                            <label for="name">姓名</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">邮箱</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">主题</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">消息</label>
+                            <textarea id="message" name="message" rows="6" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">发送消息</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>YanMo的个人博客</h3>
+                <p>信息安全专家 | 渗透测试 | 人工智能</p>
+                <p>—— 技术改变未来，代码创造世界 ——</p>
+            </div>
+            <div class="footer-social">
+                <h4>联系我 | Contact Me</h4>
+                <div class="social-links">
+                    <a href="#" class="social-link">QQ<span class="qq-tooltip">3351708803</span></a>
+                    <a href="#" class="social-link">Bilibili</a>
+                    <a href="https://github.com/YanMo5" target="_blank" class="social-link">GitHub</a>
+                    <a href="#" class="social-link">Email<span class="qq-tooltip">3351708803@qq.com</span></a>
+                    <a href="#" class="social-link">Discord</a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>友情链接</h4>
+                <a href="link-apply.html" class="footer-link">前往友链申请页面</a>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>赛博开发者 © 2026 All Copyrights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 主题切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.querySelector('.theme-toggle');
+            const body = document.body;
+            
+            // 检查本地存储中的主题偏好
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                body.classList.add('light-mode');
+                themeToggle.textContent = '切换到赛博模式';
+            }
+            
+            // 主题切换点击事件
+            themeToggle.addEventListener('click', function() {
+                body.classList.toggle('light-mode');
+                
+                if (body.classList.contains('light-mode')) {
+                    themeToggle.textContent = '切换到赛博模式';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    themeToggle.textContent = '切换到白昼模式';
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

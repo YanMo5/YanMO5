@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员后台 - YanMo的个人博客</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">YanMo的个人博客</a>
+            </div>
+            <div class="nav-container">
+                <ul class="nav-links">
+                    <li><a href="admin.html">后台首页</a></li>
+                    <li><a href="admin.html#links">友链管理</a></li>
+                    <li><a href="admin.html#articles">文章管理</a></li>
+                    <li><a href="admin.html#messages">留言管理</a></li>
+                    <li><a href="index.html">网站首页</a></li>
+                    <li><a href="#" class="logout">退出登录</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="admin-dashboard">
+            <h1>管理员后台</h1>
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <h3>待审核友链</h3>
+                    <p class="stat-number" id="pending-links">加载中...</p>
+                </div>
+                <div class="stat-card">
+                    <h3>已发布文章</h3>
+                    <p class="stat-number" id="published-articles">加载中...</p>
+                </div>
+                <div class="stat-card">
+                    <h3>总访问量</h3>
+                    <p class="stat-number" id="total-views">加载中...</p>
+                </div>
+            </div>
+        </section>
+        <script>
+            // 获取实时统计数据
+            async function getStats() {
+                try {
+                    const response = await fetch('/api/stats');
+                    if (response.ok) {
+                        const data = await response.json();
+                        document.getElementById('pending-links').textContent = data.pending_links;
+                        document.getElementById('published-articles').textContent = data.published_articles;
+                        document.getElementById('total-views').textContent = data.total_views.toLocaleString();
+                    } else {
+                        console.error('获取统计数据失败');
+                    }
+                } catch (error) {
+                    console.error('网络错误:', error);
+                }
+            }
+            
+            // 初始加载数据
+            getStats();
+            
+            // 每30秒刷新一次数据
+            setInterval(getStats, 30000);
+        </script>
+
+        <section id="links" class="admin-section">
+            <h2>友链管理</h2>
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>网站名称</th>
+                            <th>网站链接</th>
+                            <th>网站描述</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="links-table-body">
+                        <!-- 友链数据将通过JavaScript动态加载 -->
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 2rem;">加载中...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="articles" class="admin-section">
+            <h2>文章管理</h2>
+            <div class="admin-actions">
+                <button class="btn primary" onclick="showAddArticleForm()">添加文章</button>
+            </div>
+            <!-- 添加文章表单 -->
+            <div id="add-article-form" class="article-form" style="display: none;">
+                <h3>添加新文章</h3>
+                <form id="new-article-form">
+                    <div class="form-group">
+                        <label for="article-title">标题</label>
+                        <input type="text" id="article-title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="article-content">内容</label>
+                        <textarea id="article-content" name="content" rows="10" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="article-category">分类</label>
+                        <input type="text" id="article-category" name="category" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn">保存</button>
+                        <button type="button" class="btn" onclick="hideAddArticleForm()">取消</button>
+                    </div>
+                </form>
+            </div>
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>标题</th>
+                            <th>发布日期</th>
+                            <th>分类</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="articles-table-body">
+                        <!-- 文章数据将通过JavaScript动态加载 -->
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 2rem;">加载中...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="messages" class="admin-section">
+            <h2>留言管理</h2>
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>用户名</th>
+                            <th>邮箱</th>
+                            <th>留言内容</th>
+                            <th>留言日期</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="messages-table-body">
+                        <!-- 留言数据将通过JavaScript动态加载 -->
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 2rem;">加载中...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="settings" class="admin-section">
+            <h2>账户设置</h2>
+            <div class="admin-actions">
+                <button class="btn primary" onclick="showChangePasswordForm()">修改密码</button>
+            </div>
+            <!-- 修改密码表单 -->
+            <div id="change-password-form" class="article-form" style="display: none;">
+                <h3>修改管理员密码</h3>
+                <form id="password-form">
+                    <div class="form-group">
+                        <label for="current-password">当前密码</label>
+                        <input type="password" id="current-password" name="current-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-password">新密码</label>
+                        <input type="password" id="new-password" name="new-password" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn">保存</button>
+                        <button type="button" class="btn" onclick="hideChangePasswordForm()">取消</button>
+                    </div>
+                    <div id="password-message" class="form-message"></div>
+                </form>
+            </div>
+        </section>
+        <script>
+            // 加载友链数据
+            async function loadLinks() {
+                try {
+                    const response = await fetch('/api/links');
+                    if (response.ok) {
+                        const links = await response.json();
+                        const tbody = document.getElementById('links-table-body');
+                        tbody.innerHTML = '';
+                        
+                        links.forEach(link => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${link.site_name}</td>
+                                <td><a href="${link.site_url}" target="_blank">${link.site_url}</a></td>
+                                <td>${link.site_description}</td>
+                                <td><span class="status ${link.status}">${link.status === 'pending' ? '待审核' : '已通过'}</span></td>
+                                <td>
+                                    ${link.status === 'pending' ? `
+                                        <button class="btn small approve" onclick="approveLink(${link.id})")>通过</button>
+                                        <button class="btn small reject" onclick="rejectLink(${link.id})")>拒绝</button>
+                                    ` : `
+                                        <button class="btn small delete" onclick="deleteLink(${link.id})")>删除</button>
+                                    `}
+                                </td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    }
+                } catch (error) {
+                    console.error('加载友链失败:', error);
+                }
+            }
+            
+            // 加载文章数据
+            async function loadArticles() {
+                try {
+                    const response = await fetch('/api/articles');
+                    if (response.ok) {
+                        const articles = await response.json();
+                        const tbody = document.getElementById('articles-table-body');
+                        tbody.innerHTML = '';
+                        
+                        articles.forEach(article => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${article.title}</td>
+                                <td>${article.created_at}</td>
+                                <td>${article.category}</td>
+                                <td>
+                                    <button class="btn small edit" onclick="editArticle(${article.id})")>编辑</button>
+                                    <button class="btn small delete" onclick="deleteArticle(${article.id})")>删除</button>
+                                </td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    }
+                } catch (error) {
+                    console.error('加载文章失败:', error);
+                }
+            }
+            
+            // 加载留言数据
+            async function loadMessages() {
+                try {
+                    const response = await fetch('/api/messages');
+                    if (response.ok) {
+                        const messages = await response.json();
+                        const tbody = document.getElementById('messages-table-body');
+                        tbody.innerHTML = '';
+                        
+                        messages.forEach(message => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${message.name}</td>
+                                <td>${message.email}</td>
+                                <td>${message.message}</td>
+                                <td>${message.created_at}</td>
+                                <td>
+                                    <button class="btn small delete" onclick="deleteMessage(${message.id})")>删除</button>
+                                </td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    }
+                } catch (error) {
+                    console.error('加载留言失败:', error);
+                }
+            }
+            
+            // 审核友链
+            async function approveLink(id) {
+                try {
+                    const response = await fetch(`/api/links/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: 'approved' })
+                    });
+                    if (response.ok) {
+                        loadLinks();
+                        getStats();
+                    }
+                } catch (error) {
+                    console.error('审核友链失败:', error);
+                }
+            }
+            
+            // 拒绝友链
+            async function rejectLink(id) {
+                try {
+                    const response = await fetch(`/api/links/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: 'rejected' })
+                    });
+                    if (response.ok) {
+                        loadLinks();
+                        getStats();
+                    }
+                } catch (error) {
+                    console.error('拒绝友链失败:', error);
+                }
+            }
+            
+            // 删除友链
+            async function deleteLink(id) {
+                if (confirm('确定要删除这条友链吗？')) {
+                    try {
+                        const response = await fetch(`/api/links/${id}`, {
+                            method: 'DELETE'
+                        });
+                        if (response.ok) {
+                            loadLinks();
+                            getStats();
+                        }
+                    } catch (error) {
+                        console.error('删除友链失败:', error);
+                    }
+                }
+            }
+            
+            // 删除留言
+            async function deleteMessage(id) {
+                if (confirm('确定要删除这条留言吗？')) {
+                    try {
+                        const response = await fetch(`/api/messages/${id}`, {
+                            method: 'DELETE'
+                        });
+                        if (response.ok) {
+                            loadMessages();
+                        }
+                    } catch (error) {
+                        console.error('删除留言失败:', error);
+                    }
+                }
+            }
+            
+            // 删除文章
+            async function deleteArticle(id) {
+                if (confirm('确定要删除这篇文章吗？')) {
+                    try {
+                        const response = await fetch(`/api/articles/${id}`, {
+                            method: 'DELETE'
+                        });
+                        if (response.ok) {
+                            loadArticles();
+                            getStats();
+                        }
+                    } catch (error) {
+                        console.error('删除文章失败:', error);
+                    }
+                }
+            }
+            
+            // 显示添加文章表单
+            function showAddArticleForm() {
+                document.getElementById('add-article-form').style.display = 'block';
+            }
+            
+            // 隐藏添加文章表单
+            function hideAddArticleForm() {
+                document.getElementById('add-article-form').style.display = 'none';
+                document.getElementById('new-article-form').reset();
+            }
+            
+            // 提交新文章
+            document.getElementById('new-article-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const title = document.getElementById('article-title').value;
+                const content = document.getElementById('article-content').value;
+                const category = document.getElementById('article-category').value;
+                
+                try {
+                    const response = await fetch('/api/articles', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ title, content, category })
+                    });
+                    if (response.ok) {
+                        hideAddArticleForm();
+                        loadArticles();
+                        getStats();
+                    }
+                } catch (error) {
+                    console.error('添加文章失败:', error);
+                }
+            });
+            
+            // 编辑文章
+            function editArticle(id) {
+                alert('编辑功能正在开发中');
+            }
+            
+            // 初始加载数据
+            loadLinks();
+            loadArticles();
+            loadMessages();
+            
+            // 每30秒刷新一次数据
+            setInterval(() => {
+                loadLinks();
+                loadArticles();
+                loadMessages();
+                getStats();
+            }, 30000);
+        
+            // 显示修改密码表单
+            function showChangePasswordForm() {
+                document.getElementById('change-password-form').style.display = 'block';
+            }
+            
+            // 隐藏修改密码表单
+            function hideChangePasswordForm() {
+                document.getElementById('change-password-form').style.display = 'none';
+                document.getElementById('password-form').reset();
+                document.getElementById('password-message').textContent = '';
+            }
+            
+            // 提交修改密码表单
+            document.getElementById('password-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const currentPassword = document.getElementById('current-password').value;
+                const newPassword = document.getElementById('new-password').value;
+                const passwordMessage = document.getElementById('password-message');
+                
+                passwordMessage.textContent = '修改中...';
+                passwordMessage.style.color = '#0ff';
+                
+                try {
+                    const response = await fetch('/api/change-password', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ 
+                            current_password: currentPassword, 
+                            new_password: newPassword 
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            passwordMessage.textContent = '密码修改成功！';
+                            passwordMessage.style.color = '#00ff80';
+                            setTimeout(() => {
+                                hideChangePasswordForm();
+                            }, 1500);
+                        } else {
+                            passwordMessage.textContent = '修改失败: ' + result.message;
+                            passwordMessage.style.color = '#ff6b6b';
+                        }
+                    } else {
+                        const error = await response.json();
+                        passwordMessage.textContent = '修改失败: ' + error.message;
+                        passwordMessage.style.color = '#ff6b6b';
+                    }
+                } catch (error) {
+                    passwordMessage.textContent = '网络错误，请稍后再试';
+                    passwordMessage.style.color = '#ff6b6b';
+                }
+            });
+        </script>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>赛博开发者</h3>
+                <p>全栈开发者 | 赛博朋克爱好者</p>
+                <p>—— 技术改变未来，代码创造世界 ——</p>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>赛博开发者 © 2026 All Copyrights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

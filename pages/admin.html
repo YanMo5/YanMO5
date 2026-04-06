@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员登录 - YanMo的个人博客</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">YanMo的个人博客</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="login-page">
+            <div class="login-container">
+                <h1>管理员登录</h1>
+                <form id="login-form" class="login-form">
+                    <div class="form-group">
+                        <label for="username">用户名</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn">登录</button>
+                    <div id="login-message" class="form-message"></div>
+                </form>
+                <script>
+                    document.getElementById('login-form').addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        
+                        const username = document.getElementById('username').value;
+                        const password = document.getElementById('password').value;
+                        const loginMessage = document.getElementById('login-message');
+                        
+                        loginMessage.textContent = '登录中...';
+                        loginMessage.style.color = '#0ff';
+                        
+                        try {
+                            const response = await fetch('/api/login', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ username, password })
+                            });
+                            
+                            if (response.ok) {
+                                const result = await response.json();
+                                if (result.success) {
+                                    loginMessage.textContent = '登录成功，正在跳转...';
+                                    loginMessage.style.color = '#00ff80';
+                                    setTimeout(() => {
+                                        window.location.href = 'admin-dashboard.html';
+                                    }, 1500);
+                                } else {
+                                    loginMessage.textContent = '登录失败: ' + result.message;
+                                    loginMessage.style.color = '#ff6b6b';
+                                }
+                            } else {
+                                const error = await response.json();
+                                loginMessage.textContent = '登录失败: ' + error.message;
+                                loginMessage.style.color = '#ff6b6b';
+                            }
+                        } catch (error) {
+                            loginMessage.textContent = '网络错误，请稍后再试';
+                            loginMessage.style.color = '#ff6b6b';
+                        }
+                    });
+                </script>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>YanMo的个人博客</h3>
+                <p>信息安全专家 | 渗透测试 | 人工智能</p>
+                <p>—— 技术改变未来，代码创造世界 ——</p>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>YanMo的个人博客 © 2026 All Copyrights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

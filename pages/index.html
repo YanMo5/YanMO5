@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人博客</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">YanMo的个人博客</a>
+            </div>
+            <div class="nav-container">
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">首页</a></li>
+                    <li><a href="articles.html">文章</a></li>
+                    <li><a href="about.html">关于我</a></li>
+                    <li><a href="contact.html">联系</a></li>
+                    <li><a href="guestbook.html">留言板</a></li>
+                    <li><a href="links.html">友链</a></li>
+                    <li><a href="admin.html">管理</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button class="theme-toggle">切换到白昼模式</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>YanMo的个人博客</h1>
+            <p>我是一名信息安全专家，专注于渗透测试和人工智能安全领域</p>
+            <div class="hero-info">
+                <div class="info-item">
+                    <span class="info-label">技能</span>
+                    <span class="info-value">渗透测试, 网络安全, 人工智能安全, 代码审计</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">兴趣</span>
+                    <span class="info-value">网络安全研究, 漏洞分析, 安全工具开发, AI安全</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">目标</span>
+                    <span class="info-value">提升网络安全意识，构建更安全的数字世界</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="latest-posts">
+            <h2>最新安全文章</h2>
+            <div class="posts-grid">
+                <article class="post-card">
+                    <div class="post-image" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cyber%20security%20penetration%20testing%20digital%20art&image_size=landscape_16_9'); background-size: cover; background-position: center;"></div>
+                    <div class="post-content">
+                        <h3>Web应用渗透测试入门指南</h3>
+                        <p class="post-excerpt">本文介绍Web应用渗透测试的基本流程和常用工具，帮助安全爱好者入门...</p>
+                        <a href="post.html" class="read-more">阅读更多</a>
+                    </div>
+                </article>
+
+                <article class="post-card">
+                    <div class="post-image" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=artificial%20intelligence%20security%20digital%20art&image_size=landscape_16_9'); background-size: cover; background-position: center;"></div>
+                    <div class="post-content">
+                        <h3>人工智能安全威胁与防护</h3>
+                        <p class="post-excerpt">探讨AI系统面临的安全威胁，以及如何构建更安全的人工智能应用...</p>
+                        <a href="post.html" class="read-more">阅读更多</a>
+                    </div>
+                </article>
+
+                <article class="post-card">
+                    <div class="post-image" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=personal%20information%20security%20digital%20art&image_size=landscape_16_9'); background-size: cover; background-position: center;"></div>
+                    <div class="post-content">
+                        <h3>网络安全意识培训：保护个人信息</h3>
+                        <p class="post-excerpt">分享日常生活中的网络安全防护措施，提高个人信息安全意识...</p>
+                        <a href="post.html" class="read-more">阅读更多</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2>探索信息安全世界</h2>
+            <p>欢迎阅读我的安全技术文章和研究，希望能给你带来启发和帮助</p>
+            <div class="cta-buttons">
+                <a href="articles.html" class="btn">浏览安全文章</a>
+                <a href="about.html" class="btn">了解更多</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>YanMo的个人博客</h3>
+                <p>信息安全专家 | 渗透测试 | 人工智能</p>
+                <p>—— 技术改变未来，代码创造世界 ——</p>
+            </div>
+            <div class="footer-social">
+                <h4>联系我 | Contact Me</h4>
+                <div class="social-links">
+                    <a href="#" class="social-link">QQ<span class="qq-tooltip">3351708803</span></a>
+                    <a href="#" class="social-link">Bilibili</a>
+                    <a href="https://github.com/YanMo5" target="_blank" class="social-link">GitHub</a>
+                    <a href="#" class="social-link">Email<span class="qq-tooltip">3351708803@qq.com</span></a>
+                    <a href="#" class="social-link">Discord</a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>友情链接</h4>
+                <a href="link-apply.html" class="footer-link">前往友链申请页面</a>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>YanMo的个人博客 © 2026 All Copyrights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 主题切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.querySelector('.theme-toggle');
+            const body = document.body;
+            
+            // 检查本地存储中的主题偏好
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                body.classList.add('light-mode');
+                themeToggle.textContent = '切换到赛博模式';
+            }
+            
+            // 主题切换点击事件
+            themeToggle.addEventListener('click', function() {
+                body.classList.toggle('light-mode');
+                
+                if (body.classList.contains('light-mode')) {
+                    themeToggle.textContent = '切换到赛博模式';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    themeToggle.textContent = '切换到白昼模式';
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
