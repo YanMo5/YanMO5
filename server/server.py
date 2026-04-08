@@ -152,11 +152,16 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             post_data = self.rfile.read(content_length)
             data = json.loads(post_data.decode('utf-8'))
             
+            # 处理前端发送的字段名格式
+            site_name = data.get('site-name', data.get('site_name', ''))
+            site_url = data.get('site-url', data.get('site_url', ''))
+            site_description = data.get('site-description', data.get('site_description', ''))
+            
             conn = sqlite3.connect(db_path)
             c = conn.cursor()
             c.execute(
                 'INSERT INTO links (site_name, site_url, site_description) VALUES (?, ?, ?)',
-                (data['site-name'], data['site-url'], data['site-description'])
+                (site_name, site_url, site_description)
             )
             conn.commit()
             conn.close()
