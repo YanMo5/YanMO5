@@ -1,59 +1,107 @@
-// api/links.js - 处理友链申请
-export default async function handler(req, res) {
-  // 设置响应头
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+/**
+ * 友链相关API
+ * 处理友链的获取、提交、审核等操作
+ */
 
-  // 处理预检请求
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+// 友链API基础URL
+const API_URL = '/api/links';
 
-  // 处理 GET 请求
-  if (req.method === 'GET') {
-    const links = global.linksList || [];
-    return res.status(200).json({ success: true, data: links });
-  }
-
-  // 处理 POST 请求
-  if (req.method === 'POST') {
+/**
+ * 获取所有友链
+ * @returns {Promise<Array>} 友链列表
+ */
+export async function getLinks() {
     try {
-      const { name, url, description, email } = req.body;
-      
-      // 验证必填字段
-      if (!name || !url) {
-        return res.status(400).json({ 
-          success: false, 
-          error: '网站名称和网址不能为空' 
-        });
-      }
-
-      // 保存友链
-      const newLink = {
-        id: Date.now(),
-        name: name,
-        url: url,
-        description: description || '',
-        email: email || '',
-        status: 'pending',
-        applyTime: new Date().toISOString()
-      };
-
-      if (!global.linksList) global.linksList = [];
-      global.linksList.push(newLink);
-
-      return res.status(200).json({ 
-        success: true, 
-        message: '友链申请已提交！' 
-      });
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+            throw new Error('获取友链失败');
+        }
+        const data = await response.json();
+        return data;
     } catch (error) {
-      return res.status(500).json({ 
-        success: false, 
-        error: '服务器错误：' + error.message 
-      });
+        console.error('获取友链出错:', error);
+        return [];
     }
-  }
+}
 
-  return res.status(405).json({ error: 'Method not allowed' });
+/**
+ * 提交新友链
+ * @param {Object} link 友链数据
+ * @param {string} link.name 网站名称
+ * @param {string} link.url 网站URL
+ * @param {string} link.description 网站描述
+ * @param {string} link.email 联系人邮箱
+ * @returns {Promise<Object>} 提交结果
+ */
+export async function submitLink(link) {
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(link)
+        });
+        
+        if (!response.ok) {
+            throw new Error('提交友链失败');
+        }
+        
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('提交友链出错:', error);
+        throw error;
+    }
+}
+
+/**
+ * 删除友链
+ * @param {number} id 友链ID
+ * @returns {Promise<Object>} 删除结果
+ */
+export async function deleteLink(id) {
+    try {
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: 'DELETE'
+        });
+        
+        if (!response.ok) {
+            throw new Error('删除友链失败');
+        }
+        
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('删除友链出错:', error);
+        throw error;
+    }
+}
+
+/**
+ * 更新友链状态
+ * @param {number} id 友链ID
+ * @param {string} status 新状态
+ * @returns {Promise<Object>} 更新结果
+ */
+export async function updateLinkStatus(id, status) {
+    try {
+        const response = await fetch(`${API_URL}/${id}/status`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status })
+        });
+        
+        if (!response.ok) {
+            throw new Error('更新友链状态失败');
+        }
+        
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('更新友链状态出错:', error);
+        throw error;
+    }
 }
