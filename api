@@ -1,0 +1,32 @@
+// api/messages.js - 处理留言/消息的API
+
+export default function handler(req, res) {
+  // 设置允许跨域（如果需要）
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  
+  // 处理 GET 请求（前端获取留言）
+  if (req.method === 'GET') {
+    // 返回一个空数组或示例数据
+    const messages = [
+      { id: 1, name: '测试用户', content: '这是一条示例留言', time: '2024-01-01' }
+    ];
+    res.status(200).json({ 
+      success: true, 
+      data: messages 
+    });
+  } 
+  // 处理 POST 请求（前端提交新留言）
+  else if (req.method === 'POST') {
+    // 接收前端传来的数据
+    const { name, content } = req.body;
+    // 这里可以添加保存到数据库的逻辑
+    res.status(200).json({ 
+      success: true, 
+      message: '留言已提交' 
+    });
+  }
+  // 其他请求方法返回405
+  else {
+    res.status(405).json({ error: 'Method not allowed' });
+  }
+}
