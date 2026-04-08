@@ -1,106 +1,82 @@
-/**
- * 留言板相关API
- * 处理留言的获取、提交等操作
- */
+// api/messages.js - 完整的留言API
 
-// 留言API基础URL
-const API_URL = '/api/messages';
+export default async function handler(req, res) {
+  // 1. 设置允许跨域和请求头
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-/**
- * 获取所有留言
- * @returns {Promise<Array>} 留言列表
- */
-export async function getMessages() {
+  // 2. 处理预检请求（浏览器在POST前会自动发送）
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  // 3. 处理 GET 请求（获取留言列表）
+  if (req.method === 'GET') {
     try {
-        const response = await fetch(API_URL);
-        if (!response.ok) {
-            throw new Error('获取留言失败');
-        }
-        const data = await response.json();
-        return data;
+      // 这里先从内存数组读取，之后可以改为从数据库读取
+      const messages = global.messagesList || [];
+      res.status(200).json({ 
+        success: true, 
+        data: messages 
+      });
     } catch (error) {
-        console.error('获取留言出错:', error);
-        return [];
+      res.status(500).json({ 
+        success: false, 
+        error: '读取留言失败' 
+      });
     }
-}
+    return;
+  }
 
-/**
- * 提交新留言
- * @param {Object} message 留言数据
- * @param {string} message.name 留言人姓名
- * @param {string} message.email 留言人邮箱
- * @param {string} message.message 留言内容
- * @returns {Promise<Object>} 提交结果
- */
-export async function submitMessage(message) {
+  // 4. 处理 POST 请求（提交新留言）
+  if (req.method === 'POST') {
     try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(message)
+      // 解析请求体中的数据
+      const { name, email, message } = req.body;
+
+      // 简单的数据验证
+      if (!name || !message) {
+        res.status(400).json({ 
+          success: false, 
+          error: '姓名和留言内容不能为空' 
         });
-        
-        if (!response.ok) {
-            throw new Error('提交留言失败');
-        }
-        
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('提交留言出错:', error);
-        throw error;
-    }
-}
+        return;
+      }
 
-/**
- * 删除留言
- * @param {number} id 留言ID
- * @returns {Promise<Object>} 删除结果
- */
-export async function deleteMessage(id) {
-    try {
-        const response = await fetch(`${API_URL}/${id}`, {
-            method: 'DELETE'
-        });
-        
-        if (!response.ok) {
-            throw new Error('删除留言失败');
-        }
-        
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('删除留言出错:', error);
-        throw error;
-    }
-}
+      // 创建新留言对象
+      const newMessage = {
+        id: Date.now(),
+        name: name,
+        email: email || '',
+        content: message,
+        time: new Date().toISOString(),
+        status: 'pending' // 待审核
+      };
 
-/**
- * 更新留言状态
- * @param {number} id 留言ID
- * @param {string} status 新状态
- * @returns {Promise<Object>} 更新结果
- */
-export async function updateMessageStatus(id, status) {
-    try {
-        const response = await fetch(`${API_URL}/${id}/status`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ status })
-        });
-        
-        if (!response.ok) {
-            throw new Error('更新留言状态失败');
-        }
-        
-        const data = await response.json();
-        return data;
+      // 存储到全局变量（注意：服务器重启会丢失，仅用于演示）
+      if (!global.messagesList) {
+        global.messagesList = [];
+      }
+      global.messagesList.push(newMessage);
+
+      // 返回成功响应
+      res.status(200).json({ 
+        success: true, 
+        message: '留言提交成功，等待审核',
+        data: newMessage
+      });
     } catch (error) {
-        console.error('更新留言状态出错:', error);
-        throw error;
+      console.error('POST错误：', error);
+      res.status(500).json({ 
+        success: false, 
+        error: '服务器处理失败：' + error.message 
+      });
     }
+    return;
+  }
+
+  // 5. 其他方法返回405
+  res.status(405).json({ error: 'Method not allowed' });
 }
