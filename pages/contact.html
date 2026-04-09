@@ -29,6 +29,8 @@
         </nav>
     </header>
 
+    <script src="/js/local-api.js"></script>
+
     <main>
         <section class="contact-page">
             <h1>联系我</h1>
@@ -61,7 +63,7 @@
 
                 <div class="contact-form">
                     <h2>发送消息</h2>
-                    <form>
+                    <form id="contact-form">
                         <div class="form-group">
                             <label for="name">姓名</label>
                             <input type="text" id="name" name="name" required>
@@ -79,7 +81,45 @@
                             <textarea id="message" name="message" rows="6" required></textarea>
                         </div>
                         <button type="submit" class="btn">发送消息</button>
+                        <div id="contact-message" class="form-message"></div>
                     </form>
+                    <script>
+                        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+                            e.preventDefault();
+
+                            const name = document.getElementById('name').value;
+                            const email = document.getElementById('email').value;
+                            const subject = document.getElementById('subject').value;
+                            const message = document.getElementById('message').value;
+                            const contactMessage = document.getElementById('contact-message');
+
+                            contactMessage.textContent = '发送中...';
+                            contactMessage.style.color = '#0ff';
+
+                            try {
+                                const response = await fetch('/api/contact', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ name, email, subject, message })
+                                });
+
+                                const result = await response.json();
+                                if (response.ok) {
+                                    contactMessage.textContent = result.message || '消息发送成功！';
+                                    contactMessage.style.color = '#00ff80';
+                                    document.getElementById('contact-form').reset();
+                                } else {
+                                    contactMessage.textContent = '发送失败: ' + (result.error || '请稍后再试');
+                                    contactMessage.style.color = '#ff6b6b';
+                                }
+                            } catch (error) {
+                                contactMessage.textContent = '网络错误，请稍后再试';
+                                contactMessage.style.color = '#ff6b6b';
+                            }
+                        });
+                    </script>
                 </div>
             </div>
         </section>

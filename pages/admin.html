@@ -15,6 +15,13 @@
         </nav>
     </header>
 
+    <script src="/js/local-api.js"></script>
+    <script>
+        if (window.SiteLocalApi && window.SiteLocalApi.isAdminLoggedIn()) {
+            window.location.replace('admin-dashboard.html');
+        }
+    </script>
+
     <main>
         <section class="login-page">
             <div class="login-container">

@@ -1,10 +1,9 @@
-/**
- * API入口文件
- * 整合所有API函数，方便前端代码导入使用
- */
-
-// 导入各个API模块
-export * from './articles.js';
-export * from './links.js';
-export * from './messages.js';
-export * from './stats.js';
+module.exports = function handler(req, res) {
+    res.status(200).json({
+        ok: true,
+        mode: 'browser-local-storage',
+        route: '/api',
+        method: req.method || 'GET',
+        message: 'This Vercel deployment handles interactive data in the browser. Open the site pages to use guestbook, links, admin, and stats features.'
+    });
+};

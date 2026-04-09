@@ -14,16 +14,23 @@
             </div>
             <div class="nav-container">
                 <ul class="nav-links">
-                    <li><a href="admin.html">后台首页</a></li>
-                    <li><a href="admin.html#links">友链管理</a></li>
-                    <li><a href="admin.html#articles">文章管理</a></li>
-                    <li><a href="admin.html#messages">留言管理</a></li>
+                    <li><a href="admin-dashboard.html">后台首页</a></li>
+                    <li><a href="#links">友链管理</a></li>
+                    <li><a href="#articles">文章管理</a></li>
+                    <li><a href="#messages">留言管理</a></li>
                     <li><a href="index.html">网站首页</a></li>
                     <li><a href="#" class="logout">退出登录</a></li>
                 </ul>
             </div>
         </nav>
     </header>
+
+    <script src="/js/local-api.js"></script>
+    <script>
+        if (window.SiteLocalApi && !window.SiteLocalApi.isAdminLoggedIn()) {
+            window.location.replace('admin.html');
+        }
+    </script>
 
     <main>
         <section class="admin-dashboard">
@@ -205,10 +212,10 @@
                                 <td><span class="status ${link.status}">${link.status === 'pending' ? '待审核' : '已通过'}</span></td>
                                 <td>
                                     ${link.status === 'pending' ? `
-                                        <button class="btn small approve" onclick="approveLink(${link.id})")>通过</button>
-                                        <button class="btn small reject" onclick="rejectLink(${link.id})")>拒绝</button>
+                                        <button class="btn small approve" onclick="approveLink(${link.id})">通过</button>
+                                        <button class="btn small reject" onclick="rejectLink(${link.id})">拒绝</button>
                                     ` : `
-                                        <button class="btn small delete" onclick="deleteLink(${link.id})")>删除</button>
+                                        <button class="btn small delete" onclick="deleteLink(${link.id})">删除</button>
                                     `}
                                 </td>
                             `;
@@ -236,8 +243,8 @@
                                 <td>${article.created_at}</td>
                                 <td>${article.category}</td>
                                 <td>
-                                    <button class="btn small edit" onclick="editArticle(${article.id})")>编辑</button>
-                                    <button class="btn small delete" onclick="deleteArticle(${article.id})")>删除</button>
+                                    <button class="btn small edit" onclick="editArticle(${article.id})">编辑</button>
+                                    <button class="btn small delete" onclick="deleteArticle(${article.id})">删除</button>
                                 </td>
                             `;
                             tbody.appendChild(tr);
@@ -265,7 +272,7 @@
                                 <td>${message.message}</td>
                                 <td>${message.created_at}</td>
                                 <td>
-                                    <button class="btn small delete" onclick="deleteMessage(${message.id})")>删除</button>
+                                    <button class="btn small delete" onclick="deleteMessage(${message.id})">删除</button>
                                 </td>
                             `;
                             tbody.appendChild(tr);
